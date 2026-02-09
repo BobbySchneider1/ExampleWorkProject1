@@ -1,0 +1,75 @@
+@model YourApp.ViewModels.HealthIntakeViewModel
+@{
+    ViewBag.Title = "Health Intake Form - MVC";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; }
+        .question { margin-bottom: 16px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; }
+        .error { color: #b00020; font-size: 0.9em; }
+        .options { display: flex; gap: 12px; flex-wrap: wrap; }
+        .form-control { width: 100%; padding: 6px 8px; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+    <h2>@ViewBag.Title (MVC)</h2>
+
+    @using (Html.BeginForm("Submit", "HealthIntake", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "error" })
+
+        <div class="question">
+            @Html.LabelFor(m => m.FullName)
+            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", placeholder = "First Last" })
+            @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "error" })
+        </div>
+
+        <div class="question">
+            @Html.LabelFor(m => m.DOB)
+            @Html.TextBoxFor(m => m.DOB, new { @class = "form-control", placeholder = "YYYY-MM-DD", type = "date" })
+            @Html.ValidationMessageFor(m => m.DOB, "", new { @class = "error" })
+        </div>
+
+        <div class="question"></div>
+            @Html.LabelFor(m => m.Gender)
+            @Html.DropDownListFor(m => m.Gender, Model?.GenderOptions ?? new List<SelectListItem>(), "Select...", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "error" })
+        </div>
+
+        <div class="question"></div>
+            @Html.LabelFor(m => m.Allergies)
+            @Html.TextAreaFor(m => m.Allergies, 3, 60, new { @class = "form-control", placeholder = "List any known allergies" })
+            @Html.ValidationMessageFor(m => m.Allergies, "", new { @class = "error" })
+        </div>
+
+        <div class="question">
+            @Html.Label("Do you smoke?")
+            <div class="options">
+                <label>@Html.RadioButtonFor(m => m.Smoker, "Yes") Yes</label>
+                <label>@Html.RadioButtonFor(m => m.Smoker, "No") No</label>
+            </div>
+            @Html.ValidationMessageFor(m => m.Smoker, "", new { @class = "error" })
+        </div>
+
+        <div class="question">
+            <label>
+                @Html.CheckBoxFor(m => m.Consent)
+                @Html.DisplayNameFor(m => m.Consent)
+            </label>
+            @Html.ValidationMessageFor(m => m.Consent, "", new { @class = "error" })
+        </div>
+
+        <button type="submit">Submit</button>
+    }
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@4.0.0/dist/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>
